@@ -8,6 +8,12 @@ A simple FastAPI rate limiter
 
 ## How to use
 
+Install the package
+```
+pip install simplelimiter
+```
+
+Example
 
 ```py
 import redis
