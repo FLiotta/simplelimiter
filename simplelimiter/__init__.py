@@ -14,6 +14,7 @@ TIME_EQUIVALENT_IN_SECONDS = {
 
 class Limiter:
     redis: redis = None
+    ignore_limiter: bool
     debug: bool
     requests: int
     timeunit: str
@@ -26,6 +27,9 @@ class Limiter:
         self.exp_time = TIME_EQUIVALENT_IN_SECONDS[timeunits]
 
     async def __call__(self, request: Request, response: Response):
+        if self.ignore_limiter:
+            return
+
         if not self.redis:
             logging.warning("No redis instance was provided")
             return
@@ -48,9 +52,15 @@ class Limiter:
             logging.info(f"Limiter [{identifier}] will expire in {ttl}")
 
     @classmethod
-    def init(cls, redis_instance: redis, debug: Optional[bool] = False):
+    def init(
+        cls, 
+        redis_instance: redis, 
+        debug: Optional[bool] = False,
+        ignore_limiter: Optional[bool] = False
+    ):
         cls.debug = debug
         cls.redis = redis_instance
+        cls.ignore_limiter = ignore_limiter
 
     @staticmethod
     def get_identifier(request: Request) -> str:
