@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "simplelimiter"
-version = "0.1.0"
+version = "0.1.4"
 description = "Simple FastAPI rate limiter"
 authors = ["Fabrizio Liotta"]
 license = "MIT"
