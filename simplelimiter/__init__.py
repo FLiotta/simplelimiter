@@ -1,8 +1,10 @@
 import logging
-import redis
+
+from redis import Redis
 
 from typing import Optional
 from fastapi import Request, HTTPException, Response
+
 
 TIME_EQUIVALENT_IN_SECONDS = {
     "second": 1,
@@ -13,9 +15,9 @@ TIME_EQUIVALENT_IN_SECONDS = {
 
 
 class Limiter:
-    redis: redis = None
-    ignore_limiter: bool
-    debug: bool
+    redis: Redis = None
+    ignore_limiter: bool = False
+    debug: bool = False
     requests: int
     timeunit: str
     exp_time: int
@@ -54,7 +56,7 @@ class Limiter:
     @classmethod
     def init(
         cls, 
-        redis_instance: redis, 
+        redis_instance: Redis, 
         debug: Optional[bool] = False,
         ignore_limiter: Optional[bool] = False
     ):
