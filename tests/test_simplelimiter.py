@@ -1,3 +1,4 @@
+import os
 import redis
 from unittest import TestCase
 from simplelimiter import Limiter
@@ -11,8 +12,11 @@ def create_app():
 
     @app.on_event("startup")
     async def startup():
-        r = redis.from_url("redis://localhost", encoding="utf-8", decode_responses=True)
-        Limiter.init(redis_instance=r, debug=True)
+        redis_host = os.environ.get("REDIS_HOST")
+        redis_port = os.environ.get("REDIS_PORT")
+        redis_url = f"redis://{redis_host}:{redis_port}"
+        redis_instance = redis.from_url(redis_url, encoding="utf-8", decode_responses=True)
+        Limiter.init(redis_instance=redis_instance, debug=True)
 
         return app
 
